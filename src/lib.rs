@@ -24,6 +24,7 @@ pub enum Error {
     InitError,
     CreateError,
     ExecError,
+    SignalError,
     ArgumentsError,
     CStringError,
 }
@@ -35,6 +36,7 @@ impl fmt::Display for Error {
             Error::InitError => write!(f, "Initialization error"),
             Error::CreateError => write!(f, "Process creation error"),
             Error::ExecError => write!(f, "Process execution error"),
+            Error::SignalError => write!(f, "Process signaling error"),
             Error::ArgumentsError => write!(f, "Arguments list error"),
             Error::CStringError => write!(f, "String contains a bare \\0 character"),
         }
@@ -210,7 +212,7 @@ impl ProcessId {
         if result == 0 {
             Ok(())
         } else {
-            Err(Error::ExecError)
+            Err(Error::SignalError)
         }
     }
 
@@ -220,7 +222,7 @@ impl ProcessId {
         if result == 0 {
             Ok(())
         } else {
-            Err(Error::ExecError)
+            Err(Error::SignalError)
         }
     }
 }
