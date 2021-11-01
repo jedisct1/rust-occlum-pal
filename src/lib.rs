@@ -209,8 +209,7 @@ pub struct ProcessId {
 impl ProcessId {
     /// Kill the process.
     pub fn kill(self) -> Result<(), Error> {
-        let result = unsafe { occlum_pal_kill(self.pid, 9) };
-        if result == 0 {
+        if unsafe { occlum_pal_kill(self.pid, 9) } == 0 {
             Ok(())
         } else {
             Err(Error::SignalError)
@@ -219,8 +218,7 @@ impl ProcessId {
 
     /// Send SIGTERM to the process.
     pub fn terminate(self) -> Result<(), Error> {
-        let result = unsafe { occlum_pal_kill(self.pid, 16) };
-        if result == 0 {
+        if unsafe { occlum_pal_kill(self.pid, 16) } == 0 {
             Ok(())
         } else {
             Err(Error::SignalError)
