@@ -130,16 +130,6 @@ impl Stdio {
     }
 }
 
-/// A process running in an enclave.
-#[derive(Debug, PartialEq, Eq)]
-pub struct ProcessBuilder {
-    path: CString,
-    argv: Vec<CString>,
-    env: Vec<CString>,
-    pid: c_int,
-    stdio: Option<Stdio>,
-}
-
 #[derive(Debug)]
 pub struct CStringsVec {
     cstrings: Vec<CString>,
@@ -237,6 +227,15 @@ impl ProcessId {
 
 pub type ExitCode = c_int;
 
+/// A process running in an enclave.
+#[derive(Debug, PartialEq, Eq)]
+pub struct ProcessBuilder {
+    path: CString,
+    argv: Vec<CString>,
+    env: Vec<CString>,
+    stdio: Option<Stdio>,
+}
+
 impl ProcessBuilder {
     /// Create a new process.
     /// `path` is the path of the executable to run.
@@ -277,7 +276,6 @@ impl ProcessBuilder {
             path,
             argv,
             env,
-            pid: -1,
             stdio,
         })
     }
