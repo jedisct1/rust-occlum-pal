@@ -178,17 +178,17 @@ pub struct Process {
 
 impl Process {
     /// Return the process identifier.
-    pub fn process_id(&self) -> ProcessId {
+    pub fn id(&self) -> ProcessId {
         ProcessId {
             pid: unsafe { *self.process_api.ptrs.pid },
         }
     }
 
-    /// Execute the process inside the Occlum enclave
-    pub fn exec(&self) -> Result<ExitCode, Error> {
+    /// Execute the process inside the Occlum enclave.
+    pub fn exec(self) -> Result<ExitCode, Error> {
         let mut exit_code: c_int = -1;
         let mut exec_args = Box::pin(occlum_pal_exec_args {
-            pid: self.process_id().pid,
+            pid: self.id().pid,
             exit_value: &mut exit_code,
         });
         let exec_result = unsafe { occlum_pal_exec(&mut *exec_args) };
@@ -208,7 +208,7 @@ pub struct ProcessId {
 
 impl ProcessId {
     /// Kill the process.
-    pub fn kill(self) -> Result<(), Error> {
+    pub fn kill(&self) -> Result<(), Error> {
         if unsafe { occlum_pal_kill(self.pid, 9) } == 0 {
             Ok(())
         } else {
@@ -217,7 +217,7 @@ impl ProcessId {
     }
 
     /// Send SIGTERM to the process.
-    pub fn terminate(self) -> Result<(), Error> {
+    pub fn terminate(&self) -> Result<(), Error> {
         if unsafe { occlum_pal_kill(self.pid, 16) } == 0 {
             Ok(())
         } else {
