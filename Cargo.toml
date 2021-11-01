@@ -1,6 +1,6 @@
 [package]
 name = "occlum-pal"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 description = "Rust API to manage Occlum SGX enclaves"
 keywords = ["sgx", "occlum", "enclave"]
