@@ -1,0 +1,12 @@
+[package]
+name = "occlum-pal"
+version = "0.1.5"
+edition = "2021"
+description = "Rust API to manage Occlum SGX enclaves"
+keywords = ["sgx", "occlum", "enclave"]
+homepage = "https://github.com/jedisct1/rust-occlum-pal"
+license = "ISC"
+readme = "README.md"
+
+links = "occlum-pal"
+build = "build.rs"
