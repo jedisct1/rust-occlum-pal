@@ -13,6 +13,7 @@ use std::ffi::CString;
 use std::fmt;
 use std::os::raw::{c_char, c_int};
 use std::os::unix::io::AsRawFd;
+use std::path::Path;
 use std::pin::Pin;
 use std::ptr;
 use std::sync::{Arc, Mutex};
@@ -250,9 +251,15 @@ impl ProcessBuilder {
         env: Option<&[String]>,
         stdio: Option<Stdio>,
     ) -> Result<Self, Error> where {
-        let path = CString::new(path.to_string().as_bytes()).map_err(|_| Error::CStringError)?;
+        let path = path.to_string();
+        let path_cstring = CString::new(path.as_bytes()).map_err(|_| Error::CStringError)?;
         let argv = match argv {
-            None => vec![path.clone()],
+            None => {
+                let prog = Path::new(&path).file_name().unwrap_or_default();
+                let prog_cstring = CString::new(prog.to_string_lossy().as_bytes())
+                    .map_err(|_| Error::CStringError)?;
+                vec![prog_cstring]
+            }
             Some(argv) => {
                 let mut y = vec![];
                 for x in argv {
@@ -275,7 +282,7 @@ impl ProcessBuilder {
         };
 
         Ok(Self {
-            path,
+            path: path_cstring,
             argv,
             env,
             stdio,
